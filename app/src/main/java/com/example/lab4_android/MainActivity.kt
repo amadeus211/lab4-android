@@ -1,5 +1,6 @@
 package com.example.lab4_android
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
@@ -22,12 +23,14 @@ class MainActivity : ComponentActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        adapter = SimpleItemAdapter(emptyList())
+        adapter = SimpleItemAdapter(emptyList()) { item ->
+            viewModel.deleteItem(item)
+        }
         recyclerView.adapter = adapter
 
-        viewModel.allItems.observe(this, Observer { items ->
+        viewModel.allItems.observe(this) { items ->
             adapter.updateItems(items)
-        })
+        }
 
         val addButton = findViewById<Button>(R.id.addButton)
         val deleteButton = findViewById<Button>(R.id.deleteButton)
@@ -38,7 +41,6 @@ class MainActivity : ComponentActivity() {
             val description = "Created item №${counter}"
             viewModel.addItem(name, description)
             counter++
-
         }
 
         deleteButton.setOnClickListener {
@@ -47,7 +49,14 @@ class MainActivity : ComponentActivity() {
                 viewModel.deleteItem(items.last())
             }
         }
+        val lab5Button = findViewById<Button>(R.id.lab5Button)
+
+        lab5Button.setOnClickListener {
+            val intent = Intent(this, Lab5Activity::class.java)
+            startActivity(intent)
+        }
     }
 }
+
 
 

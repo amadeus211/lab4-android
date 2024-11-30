@@ -3,16 +3,20 @@ package com.example.lab4_android.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lab4_android.R
 import com.example.lab4_android.data.SimpleItem
 
-class SimpleItemAdapter(private var itemList: List<SimpleItem>) :
-    RecyclerView.Adapter<SimpleItemAdapter.ItemViewHolder>() {
+class SimpleItemAdapter(
+    private var itemList: List<SimpleItem>,
+    private val onDeleteClick: (SimpleItem) -> Unit
+) : RecyclerView.Adapter<SimpleItemAdapter.ItemViewHolder>() {
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.itemTitle)
+        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -24,6 +28,9 @@ class SimpleItemAdapter(private var itemList: List<SimpleItem>) :
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = itemList[position]
         holder.titleTextView.text = "ID: ${item.id}, Name: ${item.name}, Description: ${item.description}"
+        holder.deleteButton.setOnClickListener {
+            onDeleteClick(item)
+        }
     }
 
     override fun getItemCount(): Int = itemList.size
